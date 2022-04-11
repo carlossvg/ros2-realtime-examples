@@ -42,17 +42,33 @@ public:
     RCLCPP_INFO(get_logger(), "Waiting to configure the node");
   }
 
+  bool wait_for_subscription()
+  {
+    std::uint32_t max_iterations = 1000U; // 10s
+    std::uint32_t iterations = 0U;
+    while (rclcpp::ok() && pub_->get_subscription_count() < 1U) {
+      if (iterations >= max_iterations) {
+        return false;
+      }
+      iterations++;
+      rclcpp::sleep_for(10ms);
+    }
+    return true;
+  }
+
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_configure(const rclcpp_lifecycle::State &) override
   {
     pub_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
     auto timer_callback =
-        [this]() -> void {
+      [this]() -> void {
+        if (pub_->is_activated()) {
           auto message = std_msgs::msg::String();
           message.data = "Hello, world! " + std::to_string(this->count_++);
           RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
           this->pub_->publish(message);
-        };
+        }
+      };
     timer_ = this->create_wall_timer(1s, timer_callback);
     timer_->cancel();
 
@@ -62,35 +78,29 @@ public:
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  on_activate(const rclcpp_lifecycle::State & state) override
+  on_activate(const rclcpp_lifecycle::State &) override
   {
-    LifecycleNode::on_activate(state);
+    RCLCPP_INFO(get_logger(), "on_activate() is called.");
+    RCLCPP_INFO(get_logger(), "waiting the subscription to match");
 
-    RCUTILS_LOG_INFO_NAMED(get_name(), "on_activate() is called.");
-    RCUTILS_LOG_INFO_NAMED(get_name(), "waiting the subscription to match");
-    // wait until a subscription is matched
-    // TODO: move to function with chrono timeout
-    std::uint32_t max_iterations = 1000U; // 10s
-    std::uint32_t iterations = 0U;
-    while (rclcpp::ok() &&  pub_->get_subscription_count() < 1U) {
-      if (iterations >= max_iterations) {
-        return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::FAILURE;
-      }
-      iterations++;
-      rclcpp::sleep_for(10ms);
+    if(!wait_for_subscription()) {
+      return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::FAILURE;
     }
-    RCUTILS_LOG_INFO_NAMED(get_name(), "subscription matched");
+
+    RCLCPP_INFO(get_logger(), "subscription matched");
     // activate timer
     timer_->reset();
+    pub_->on_activate();
 
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
-  on_deactivate(const rclcpp_lifecycle::State & state) override
+  on_deactivate(const rclcpp_lifecycle::State &) override
   {
-    LifecycleNode::on_deactivate(state);
-    RCUTILS_LOG_INFO_NAMED(get_name(), "on_deactivate() is called.");
+    timer_->cancel();
+    pub_->on_deactivate();
+    RCLCPP_INFO(get_logger(), "on_deactivate() is called.");
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
@@ -98,8 +108,7 @@ public:
   on_cleanup(const rclcpp_lifecycle::State &) override
   {
     timer_.reset();
-    pub_.reset();
-    RCUTILS_LOG_INFO_NAMED(get_name(), "on cleanup is called.");
+    RCLCPP_INFO(get_logger(), "on cleanup is called.");
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 
@@ -109,11 +118,7 @@ public:
     timer_.reset();
     pub_.reset();
 
-    RCUTILS_LOG_INFO_NAMED(
-      get_name(),
-      "on shutdown is called from state %s.",
-      state.label().c_str());
-
+    RCLCPP_INFO(get_logger(), "on shutdown is called from state %s.", state.label().c_str());
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
 

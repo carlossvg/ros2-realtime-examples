@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <pthread.h>
+
 #include <chrono>
 #include <memory>
 #include <string>
@@ -20,14 +22,12 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
-#include <pthread.h>
-
 using namespace std::chrono_literals;
 
 class MinimalPublisher : public rclcpp::Node
 {
 public:
-  MinimalPublisher()
+  explicit MinimalPublisher()
   : Node("minimal_publisher"), count1_(0), count2_(0)
   {
     publisher1_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
@@ -66,24 +66,76 @@ private:
   rclcpp::CallbackGroup::SharedPtr realtime_callback_group_;
 };
 
+class MinimalSubscriber : public rclcpp::Node
+{
+public:
+  MinimalSubscriber()
+  : Node("minimal_subscriber")
+  {
+    subscription1_ = this->create_subscription<std_msgs::msg::String>(
+      "topic",
+      10,
+      [this](std_msgs::msg::String::UniquePtr msg) {
+        RCLCPP_INFO(this->get_logger(), "I heard:        '%s'", msg->data.c_str());
+      });
+
+    realtime_callback_group_ = this->create_callback_group(
+      rclcpp::CallbackGroupType::MutuallyExclusive, false);
+
+    rclcpp::SubscriptionOptions subscription_options;
+    subscription_options.callback_group = realtime_callback_group_;
+    subscription2_ = this->create_subscription<std_msgs::msg::String>(
+      "topic_rt",
+      10,
+      [this](std_msgs::msg::String::UniquePtr msg) {
+        RCLCPP_INFO(this->get_logger(), "I heard (RT):   '%s'", msg->data.c_str());
+      }, subscription_options);
+  }
+
+  rclcpp::CallbackGroup::SharedPtr get_realtime_callback_group()
+  {
+    return realtime_callback_group_;
+  }
+
+private:
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription1_;
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription2_;
+  rclcpp::CallbackGroup::SharedPtr realtime_callback_group_;
+};
+
+
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<MinimalPublisher>();
+  auto node_pub = std::make_shared<MinimalPublisher>();
+  auto node_sub = std::make_shared<MinimalSubscriber>();
 
   rclcpp::executors::StaticSingleThreadedExecutor default_callback_group_executor;
   rclcpp::executors::StaticSingleThreadedExecutor realtime_executor;
 
-  default_callback_group_executor.add_node(node);
+  default_callback_group_executor.add_node(node_pub);
+  default_callback_group_executor.add_node(node_sub);
+
+  // all the real-time callback groups are grouped on one specific executor
   realtime_executor.add_callback_group(
-    node->get_realtime_callback_group(), node->get_node_base_interface());
+    node_pub->get_realtime_callback_group(), node_pub->get_node_base_interface());
+  realtime_executor.add_callback_group(
+    node_sub->get_realtime_callback_group(), node_sub->get_node_base_interface());
 
   // spin real-time tasks in a separate thread
   auto realtime_thread = std::thread(
     [&]() {
       realtime_executor.spin();
     });
+
+  struct sched_param param {};
+  int policy = SCHED_FIFO;
+  param.sched_priority = 90;
+  auto ret = pthread_setschedparam(realtime_thread.native_handle(), policy, &param);
+  if (ret > 0) {
+    printf("Couldn't set scheduling priority and policy. Error code %d", ret);
+  }
 
   default_callback_group_executor.spin();
   realtime_thread.join();

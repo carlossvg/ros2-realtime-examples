@@ -13,14 +13,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <pthread.h>
+
 #include <chrono>
 #include <memory>
 #include <string>
 
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
-
-#include <pthread.h>
 
 using namespace std::chrono_literals;
 

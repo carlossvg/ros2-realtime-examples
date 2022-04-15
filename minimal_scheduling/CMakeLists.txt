@@ -23,10 +23,14 @@ ament_target_dependencies(minimal_publisher_child_thread rclcpp std_msgs)
 add_executable(minimal_spinner_thread minimal_spinner_thread.cpp)
 ament_target_dependencies(minimal_spinner_thread rclcpp std_msgs)
 
+add_executable(minimal_callback_group minimal_callback_group.cpp)
+ament_target_dependencies(minimal_callback_group rclcpp std_msgs)
+
 install(TARGETS
   minimal_publisher
   minimal_publisher_child_thread
   minimal_spinner_thread
+  minimal_callback_group
   DESTINATION lib/${PROJECT_NAME}
 )
 

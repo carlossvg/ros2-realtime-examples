@@ -4,7 +4,7 @@
   <name>minimal_realtime_loop</name>
   <version>0.0.1</version>
   <description>Examples of minimal real-time loops implementations</description>
-  <maintainer>Carlos San Vicente</maintainer>
+  <maintainer email="carlos.svic@gmail.com">Carlos San Vicente</maintainer>
   <license>Apache License 2.0</license>
   <author>Carlos San Vicente</author>
 

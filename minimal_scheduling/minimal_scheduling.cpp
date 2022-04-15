@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <pthread.h>
+
 #include <chrono>
 #include <memory>
 #include <string>
@@ -20,7 +22,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 
-#include <pthread.h>
 
 using namespace std::chrono_literals;
 
@@ -60,7 +61,6 @@ int main(int argc, char * argv[])
   if (ret > 0) {
     printf("Couldn't set scheduling priority and policy. Error code %d", ret);
   }
-
   rclcpp::spin(node);
   rclcpp::shutdown();
   return 0;

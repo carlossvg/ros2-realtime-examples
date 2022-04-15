@@ -4,9 +4,9 @@
   <name>minimal_deadline_qos</name>
   <version>0.0.1</version>
   <description>Examples of minimal deadline QoS usage</description>
-  <maintainer email="carlos.sanvicente@apex.ai">Carlos San Vicente</maintainer>
+  <maintainer>Carlos San Vicente</maintainer>
   <license>Apache License 2.0</license>
-  <author email="carlos.sanvicente@apex.ai">Carlos San Vicente</author>
+  <author>Carlos San Vicente</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 

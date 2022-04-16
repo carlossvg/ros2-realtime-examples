@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// Original code:
+// https:://github.com/ros2/realtime_support/blob/0e3faef4b7aa7985726dba97c761a6783f62a958/tlsf_cpp/example/allocator_example.cpp
+
 #include <chrono>
 #include <list>
 #include <memory>

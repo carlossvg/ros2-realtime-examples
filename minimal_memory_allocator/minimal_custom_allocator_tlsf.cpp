@@ -1,3 +1,20 @@
+// Copyright 2015 Open Source Robotics Foundation, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Original code:
+// https://github.com/ros2/demos/blob/7a15d0bf14e5765ea223873b6927be908c7acbb3/demo_nodes_cpp/src/topics/allocator_tutorial.cpp
+
 #include <list>
 #include <memory>
 #include <string>
@@ -8,8 +25,6 @@
 #include "std_msgs/msg/u_int32.hpp"
 #include "tlsf_cpp/tlsf.hpp"
 
-
-// https://docs.ros.org/en/galactic/Tutorials/Allocator-Template-Tutorial.html
 
 template<typename T>
 using TLSFAllocator = tlsf_heap_allocator<T>;
@@ -94,7 +109,6 @@ int main(int argc, char ** argv)
   rclcpp::allocator::set_allocator_for_deleter(&message_deleter, &message_alloc);
 
   rclcpp::sleep_for(std::chrono::milliseconds(1));
-
 
   uint32_t i = 0;
   while (rclcpp::ok() && i < 100) {

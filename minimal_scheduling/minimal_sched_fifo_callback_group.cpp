@@ -117,7 +117,8 @@ int main(int argc, char * argv[])
   default_callback_group_executor.add_node(node_pub);
   default_callback_group_executor.add_node(node_sub);
 
-  // all the real-time callback groups are grouped on one specific executor
+  // the real-time callback groups are added to a specific executor for real-time purposes
+  // note we could have more than one executor with different scheduling policies and priorities
   realtime_executor.add_callback_group(
     node_pub->get_realtime_callback_group(), node_pub->get_node_base_interface());
   realtime_executor.add_callback_group(

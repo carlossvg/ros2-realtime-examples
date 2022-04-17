@@ -3,7 +3,8 @@
 <package format="2">
   <name>minimal_memory_check</name>
   <version>0.0.1</version>
-  <description>Examples of minimal scheduling policy and priority configuration</description>
+  <description>Examples of memory check tools to detect non-deterministic memory
+    system calls</description>
   <maintainer email="carlos.svic@gmail.com">Carlos San Vicente</maintainer>
   <license>Apache License 2.0</license>
   <author>Carlos San Vicente</author>

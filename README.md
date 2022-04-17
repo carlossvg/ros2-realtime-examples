@@ -1,5 +1,8 @@
 # Minimal ROS 2 real-time cookbook recipes
 
+Collection of ROS 2 minimal examples showing how to leverage different POSIX and ROS features to
+create real-time applications.
+
 * [minimal_scheduling](minimal_scheduling/README.md): shows how to configure the process or thread(s
 ) scheduling policy and
  priority (TODO: add SCHED_DEADLINE example)
@@ -20,9 +23,17 @@ does not allocate dynamic memory
 * [minimal_dds_tuning](minimal_dds_tuning/README.md): shows how to use DDS specific configurations to tune real-time
  related settings (TODO: add XML profiles for more DDS implementations)
 
+
+## Requirements
+
+- ROS 2 rolling release
+- Linux based operating system (RT_PREEMPT is not mandatory to run the examples)
+- Privileges to set priority, scheduling and memory lock limits. This can be achieved by having
+ root privileges or adding user privileges to `/etc/security/limits.conf`
+
 # Build instructions
 
-Install dependencies (in ROS rolling)
+Install dependencies (rolling):
 
 ```bash
 sudo apt install ros-rolling-tlsf-cpp ros-rolling-tlsf \
@@ -34,3 +45,5 @@ Build examples
 ```bash
 colcon build --packages-up-to ros2_realtime_examples
 ```
+
+**Note: Some examples might require to install additional RMW implementations**

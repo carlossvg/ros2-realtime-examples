@@ -1,6 +1,6 @@
 # minimal_loaned_messages
 
-## Setup 
+## Requirements 
 
 Install rmw_iceoryx https://github.com/ros2/rmw_iceoryx
 

@@ -3,7 +3,7 @@
 <package format="2">
   <name>minimal_loaned_messages</name>
   <version>0.0.1</version>
-  <description>Examples of minimal memory strategies usage</description>
+  <description>Examples of minimal message loaning and zero-copy communications</description>
   <maintainer email="carlos.svic@gmail.com">Carlos San Vicente</maintainer>
   <license>Apache License 2.0</license>
   <author>Carlos San Vicente</author>

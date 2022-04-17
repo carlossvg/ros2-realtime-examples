@@ -51,6 +51,12 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
+  // The main thread settings are set before the middleware threads
+  // are created. The middleware threads will inherit the CPU affinity settings.
+  // From: https://linux.die.net/man/3/pthread_create
+  // The new thread inherits copies of the calling thread's capability sets
+  // (see capabilities(7)) and CPU affinity mask (see sched_setaffinity(2)).
+
   int cpu_id = 1;
   cpu_set_t cpuset;
   CPU_ZERO(&cpuset);

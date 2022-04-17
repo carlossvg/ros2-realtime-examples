@@ -1,6 +1,6 @@
 # minimal_memory_lock
 
-## Setup 
+## Requirements 
 
 Adjust permissions for memory locking see (https://docs.ros.org/en/foxy/Tutorials/Real-Time-Programming.html#adjust-permissions-for-memory-locking)
  or run as root

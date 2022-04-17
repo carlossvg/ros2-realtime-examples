@@ -53,6 +53,7 @@ int main(int argc, char * argv[])
 
   auto node = std::make_shared<MinimalPublisher>();
 
+  // The node is spun in a separate thread adn configured after it is created
   auto rt_thread = std::thread(
     [&]() {
       rclcpp::spin(node);

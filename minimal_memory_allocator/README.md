@@ -12,7 +12,6 @@ Current state of ROS 2 memory allocator usage:
 - https://github.com/ros2/demos/issues/292
 - https://github.com/ros2/ros2/issues/590
 
-
 ## How to run
 
 ### minimal_custom_allocator
@@ -36,4 +35,5 @@ ros2 run minimal_memory_allocator listener_message_pool
 ## Resources
 
 - https://docs.ros.org/en/eloquent/Tutorials/Allocator-Template-Tutorial.html
+- https://www.youtube.com/watch?v=l14Zkx5OXr4
 

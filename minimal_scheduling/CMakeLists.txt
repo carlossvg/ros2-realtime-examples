@@ -14,23 +14,23 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 
-add_executable(minimal_publisher minimal_scheduling.cpp)
-ament_target_dependencies(minimal_publisher rclcpp std_msgs)
+add_executable(minimal_sched_fifo minimal_sched_fifo.cpp)
+ament_target_dependencies(minimal_sched_fifo rclcpp std_msgs)
 
-add_executable(minimal_scheduling_middleware_threads minimal_scheduling_middleware_threads.cpp)
-ament_target_dependencies(minimal_scheduling_middleware_threads rclcpp std_msgs)
+add_executable(minimal_sched_fifo_middleware_threads minimal_sched_fifo_middleware_threads.cpp)
+ament_target_dependencies(minimal_sched_fifo_middleware_threads rclcpp std_msgs)
 
-add_executable(minimal_spinner_thread minimal_spinner_thread.cpp)
-ament_target_dependencies(minimal_spinner_thread rclcpp std_msgs)
+add_executable(minimal_sched_fifo_spinner_thread minimal_sched_fifo_spinner_thread.cpp)
+ament_target_dependencies(minimal_sched_fifo_spinner_thread rclcpp std_msgs)
 
-add_executable(minimal_callback_group minimal_callback_group.cpp)
-ament_target_dependencies(minimal_callback_group rclcpp std_msgs)
+add_executable(minimal_sched_fifo_callback_group minimal_sched_fifo_callback_group.cpp)
+ament_target_dependencies(minimal_sched_fifo_callback_group rclcpp std_msgs)
 
 install(TARGETS
-  minimal_publisher
-  minimal_scheduling_middleware_threads
-  minimal_spinner_thread
-  minimal_callback_group
+  minimal_sched_fifo
+  minimal_sched_fifo_middleware_threads
+  minimal_sched_fifo_spinner_thread
+  minimal_sched_fifo_callback_group
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -5,7 +5,8 @@
  priority (TODO: add SCHED_DEADLINE example)
 * [minimal_cpu_affinity](minimal_cpu_affinity/README.md): shows how to set the process and threads CPU affinity
 * [minimal_realtime_loop](minimal_realtime_loop/README.md): shows different approaches to created typical real-time time based loops
-* [minimal_memory_lock](minimal_memory_lock/README.md): shows how to lock the process memory and pre-allocate dynamic memory
+* [minimal_memory_lock](minimal_memory_lock/README.md): shows how to lock the process memory and
+ pre-allocate dynamic memory to avoid memory page faults
 * [minimal_deadline_qos](minimal_deadline_qos/README.md): shows how to use the DDS deadline QoS policy
 * [minimal_lifecycle](minimal_lifecycle/README.md): shows how to use node lifecycle to separate configuration and runtime
  real-time phases

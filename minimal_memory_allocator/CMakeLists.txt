@@ -15,19 +15,19 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(tlsf REQUIRED)
 
-add_executable(minimal_custom_allocator minimal_custom_allocator.cpp)
-ament_target_dependencies(minimal_custom_allocator rclcpp std_msgs)
+add_executable(minimal_memory_allocator_custom minimal_memory_allocator_custom.cpp)
+ament_target_dependencies(minimal_memory_allocator_custom rclcpp std_msgs)
 
-add_executable(minimal_custom_allocator_tlsf minimal_custom_allocator_tlsf.cpp)
-ament_target_dependencies(minimal_custom_allocator_tlsf rclcpp std_msgs tlsf)
+add_executable(minimal_memory_allocator_tlsf minimal_memory_allocator_tlsf.cpp)
+ament_target_dependencies(minimal_memory_allocator_tlsf rclcpp std_msgs tlsf)
 
-add_executable(listener_message_pool listener_message_pool.cpp)
-ament_target_dependencies(listener_message_pool rclcpp std_msgs tlsf)
+add_executable(minimal_message_pool minimal_message_pool.cpp)
+ament_target_dependencies(minimal_message_pool rclcpp std_msgs tlsf)
 
 install(TARGETS
-  minimal_custom_allocator
-  minimal_custom_allocator_tlsf
-  listener_message_pool
+  minimal_memory_allocator_custom
+  minimal_memory_allocator_tlsf
+  minimal_message_pool
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -25,7 +25,8 @@ does not allocate dynamic memory
 Install dependencies (in ROS rolling)
 
 ```bash
-sudo apt install ros-rolling-tlsf-cpp ros-rolling-tlsf ros-rolling-apex-test-tools ros-rolling-apex-containers -y
+sudo apt install ros-rolling-tlsf-cpp ros-rolling-tlsf \
+ros-rolling-apex-test-tools ros-rolling-apex-containers ros-rolling-test-msgs -y
 ```
 
 Build examples

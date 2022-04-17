@@ -1,7 +1,5 @@
 # minimal_lifecycle
 
-## Setup 
-
 ## How to run
 
 Terminal 1:

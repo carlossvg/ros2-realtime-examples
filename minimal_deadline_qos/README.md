@@ -1,12 +1,17 @@
 # minimal_deadline_qos
 
-## Setup 
-
 ## How to run
 
+Terminal 1:
 
-## Prerequisites
+```bash
+ros2 run minimal_deadline_qos talker_deadline_qos
+```
 
+Terminal 2:
+```bash
+ros2 run minimal_deadline_qos listener_deadline_qos
+```
 
 ## Resources
 

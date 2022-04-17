@@ -1,12 +1,34 @@
 # minimal_data_sharing
 
-## Setup 
-
 ## How to run
 
+### minimal_atomic_message
 
-## Prerequisites
+```bash
+ros2 run minimal_data_sharing minimal_atomic_message
+```
 
+### minimal_atomic_parameter
+
+```bash
+ros2 run minimal_data_sharing minimal_atomic_parameter
+```
+
+```bash
+ros2 param set /minimal_publisher count 0
+```
+
+### minimal_lock_free_queue
+
+```bash
+ros2 run minimal_data_sharing minimal_lock_free_queue
+```
+
+### minimal_lock_free_queue_logging
+
+```bash
+ros2 run minimal_data_sharing minimal_lock_free_queue_logging
+```
 
 ## Resources
 

@@ -29,6 +29,41 @@
 template<typename T>
 using TLSFAllocator = tlsf_heap_allocator<T>;
 
+// Override global new and delete to count calls during execution.
+
+static bool is_running = false;
+static uint32_t global_runtime_allocs = 0;
+static uint32_t global_runtime_deallocs = 0;
+
+void * operator new(std::size_t size)
+{
+  if (is_running) {
+    global_runtime_allocs++;
+  }
+  return std::malloc(size);
+}
+
+void operator delete(void * ptr, size_t size) noexcept
+{
+  (void)size;
+  if (ptr != nullptr) {
+    if (is_running) {
+      global_runtime_deallocs++;
+    }
+    std::free(ptr);
+  }
+}
+
+void operator delete(void * ptr) noexcept
+{
+  if (ptr != nullptr) {
+    if (is_running) {
+      global_runtime_deallocs++;
+    }
+    std::free(ptr);
+  }
+}
+
 int main(int argc, char ** argv)
 {
   using rclcpp::memory_strategies::allocator_memory_strategy::AllocatorMemoryStrategy;
@@ -39,6 +74,15 @@ int main(int argc, char ** argv)
 
   std::list<std::string> keys = {"intra", "intraprocess", "intra-process", "intra_process"};
   bool intra_process = false;
+
+  printf(
+      "This simple demo shows off a custom memory allocator to count all\n"
+      "instances of new/delete in the program.  It can be run in either regular\n"
+      "mode (no arguments), or in intra-process mode (by passing 'intra' as a\n"
+      "command-line argument).  It will then publish a message to the\n"
+      "'/allocator_tutorial' topic every 10 milliseconds until Ctrl-C is pressed.\n"
+      "At that time it will print a count of the number of allocations and\n"
+      "deallocations that happened during the program.\n\n");
 
   if (argc > 1) {
     for (auto & key : keys) {
@@ -109,9 +153,10 @@ int main(int argc, char ** argv)
   rclcpp::allocator::set_allocator_for_deleter(&message_deleter, &message_alloc);
 
   rclcpp::sleep_for(std::chrono::milliseconds(1));
+  is_running = true;
 
   uint32_t i = 0;
-  while (rclcpp::ok() && i < 100) {
+  while (rclcpp::ok()) {
     // Create a message with the custom allocator, so that when the Executor deallocates the
     // message on the execution path, it will use the custom deallocate.
     auto ptr = MessageAllocTraits::allocate(message_alloc, 1);
@@ -120,9 +165,15 @@ int main(int argc, char ** argv)
     msg->data = i;
     ++i;
     publisher->publish(std::move(msg));
-    rclcpp::sleep_for(std::chrono::milliseconds(1));
+    rclcpp::sleep_for(std::chrono::milliseconds(10));
     executor.spin_some();
   }
+  is_running = false;
+
+  uint32_t final_global_allocs = global_runtime_allocs;
+  uint32_t final_global_deallocs = global_runtime_deallocs;
+  printf("Global new was called %u times during spin\n", final_global_allocs);
+  printf("Global delete was called %u times during spin\n", final_global_deallocs);
 
   return 0;
 }

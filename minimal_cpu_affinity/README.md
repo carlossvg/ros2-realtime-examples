@@ -1,12 +1,10 @@
 # minimal_cpu_affinity
 
-## Setup 
-
 ## How to run
 
-
-## Prerequisites
-
+```bash
+ros2 run minimal_cpu_affinity minimal_cpu_affinity
+```
 
 ## Resources
 

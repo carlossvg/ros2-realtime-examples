@@ -7,20 +7,34 @@ or run as root.
 
 ## How to run
 
-```bash
-ros2 run minimal_scheduling minimal_publisher
-```
+### minimal_sched_fifo
 
 ```bash
-ros2 run minimal_scheduling minimal_scheduling_middleware_threads
+ros2 run minimal_scheduling minimal_sched_fifo
 ```
 
-```bash
-ros2 run minimal_scheduling minimal_spinner_thread
-```
+### minimal_sched_fifo_middleware_threads
 
 ```bash
-ros2 run minimal_scheduling minimal_callback_group
+ros2 run minimal_scheduling minimal_sched_fifo_middleware_threads
+```
+
+### minimal_sched_fifo_spinner_thread
+
+```bash
+ros2 run minimal_scheduling minimal_sched_fifo_spinner_thread
+```
+
+### minimal_sched_fifo_callback_group
+
+```bash
+ros2 run minimal_scheduling minimal_sched_fifo_callback_group
+```
+
+### minimal_sched_fifo_callback_group
+
+```bash
+ros2 run minimal_scheduling minimal_sched_fifo_callback_group
 ```
 
 ## Resources
@@ -32,5 +46,3 @@ ros2 run minimal_scheduling minimal_callback_group
 ), [slides](https://www.apex.ai/_files/ugd/984e93_f3791ae0711042a883bfc40f827d6268.pdf)
 - https://github.com/ros2/examples/tree/master/rclcpp/executors/cbg_executor
 - https://wiki.linuxfoundation.org/realtime/documentation/technical_basics/sched_policy_prio/sched_deadline
-
-## Building the examples

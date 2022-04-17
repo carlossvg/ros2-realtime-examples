@@ -32,7 +32,7 @@ using namespace std::chrono_literals;
 class LoanedMessageTalker : public rclcpp::Node
 {
 public:
-  explicit LoanedMessageTalker()
+  LoanedMessageTalker()
   : Node("loaned_message_talker")
   {
     // Create a function for when messages are to be sent.
@@ -84,10 +84,12 @@ public:
     pod_pub_ = this->create_publisher<std_msgs::msg::Float64>("chatter_pod", qos);
     non_pod_pub_ = this->create_publisher<std_msgs::msg::String>("chatter", qos);
 
-    RCLCPP_INFO(this->get_logger(), "POD publisher can_loan_messages: %s",
-                pod_pub_->can_loan_messages() ? "True" : "False");
-    RCLCPP_INFO(this->get_logger(), "Non POD publisher can_loan_messages: %s",
-                non_pod_pub_->can_loan_messages() ? "True" : "False");
+    RCLCPP_INFO(
+      this->get_logger(), "POD publisher can_loan_messages: %s",
+      pod_pub_->can_loan_messages() ? "True" : "False");
+    RCLCPP_INFO(
+      this->get_logger(), "Non POD publisher can_loan_messages: %s",
+      non_pod_pub_->can_loan_messages() ? "True" : "False");
 
     // Use a timer to schedule periodic message publishing.
     timer_ = this->create_wall_timer(1s, publish_message);

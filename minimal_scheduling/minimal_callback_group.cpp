@@ -27,7 +27,7 @@ using namespace std::chrono_literals;
 class MinimalPublisher : public rclcpp::Node
 {
 public:
-  explicit MinimalPublisher()
+  MinimalPublisher()
   : Node("minimal_publisher"), count1_(0), count2_(0)
   {
     publisher1_ = this->create_publisher<std_msgs::msg::String>("topic", 10);

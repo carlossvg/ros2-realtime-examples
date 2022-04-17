@@ -20,15 +20,13 @@ add_executable(lifecycle_talker lifecycle_talker.cpp)
 ament_target_dependencies(lifecycle_talker
     "lifecycle_msgs"
     "rclcpp_lifecycle"
-    "std_msgs"
-    )
+    "std_msgs")
 
 add_executable(lifecycle_listener lifecycle_listener.cpp)
 ament_target_dependencies(lifecycle_listener
     "lifecycle_msgs"
     "rclcpp_lifecycle"
-    "std_msgs"
-    )
+    "std_msgs")
 
 install(TARGETS
   lifecycle_talker

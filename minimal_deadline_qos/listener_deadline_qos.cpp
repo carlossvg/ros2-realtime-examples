@@ -31,8 +31,8 @@ public:
       [this](rclcpp::QOSDeadlineRequestedInfo & event) -> void
       {
         RCLCPP_WARN(
-            this->get_logger(), "Requested deadline missed - total %d delta %d",
-            event.total_count, event.total_count_change);
+          this->get_logger(), "Requested deadline missed - total %d delta %d",
+          event.total_count, event.total_count_change);
       };
     auto qos = rclcpp::QoS(10).deadline(500ms);
     subscription_ = this->create_subscription<std_msgs::msg::String>(

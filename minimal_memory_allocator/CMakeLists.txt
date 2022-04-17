@@ -16,10 +16,10 @@ find_package(std_msgs REQUIRED)
 find_package(tlsf REQUIRED)
 
 add_executable(minimal_custom_allocator minimal_custom_allocator.cpp)
-ament_target_dependencies(allocator_tutorial rclcpp std_msgs)
+ament_target_dependencies(minimal_custom_allocator rclcpp std_msgs)
 
 add_executable(minimal_custom_allocator_tlsf minimal_custom_allocator_tlsf.cpp)
-ament_target_dependencies(allocator_example rclcpp std_msgs tlsf)
+ament_target_dependencies(minimal_custom_allocator_tlsf rclcpp std_msgs tlsf)
 
 add_executable(listener_message_pool listener_message_pool.cpp)
 ament_target_dependencies(listener_message_pool rclcpp std_msgs tlsf)

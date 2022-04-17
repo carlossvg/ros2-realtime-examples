@@ -30,16 +30,19 @@ public:
     RCLCPP_INFO(get_logger(), "Waiting to configure the node");
   }
 
-  bool wait_for_publisher()
+  bool wait_for_publisher(std::chrono::seconds timeout = 10s)
   {
-    std::uint32_t max_iterations = 1000U; // 10s
-    std::uint32_t iterations = 0U;
-    while (rclcpp::ok() && subscription_->get_publisher_count() < 1U) {
-      if (iterations >= max_iterations) {
+    bool is_ready = false;
+    std::chrono::time_point<std::chrono::steady_clock> start{std::chrono::steady_clock::now()};
+
+    while (rclcpp::ok() && !is_ready) {
+      is_ready = subscription_->get_publisher_count() > 0U;
+      if (!is_ready) {
+        rclcpp::sleep_for(std::chrono::milliseconds(10));
+      }
+      if (std::chrono::steady_clock::now() - start > timeout) {
         return false;
       }
-      iterations++;
-      rclcpp::sleep_for(10ms);
     }
     return true;
   }
@@ -47,7 +50,7 @@ public:
   rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
   on_configure(const rclcpp_lifecycle::State &) override
   {
-    // TODO: add size as parameter
+    // TODO(carlos): add size as parameter
     constexpr std::size_t max_received_msgs = 10;
     received_msgs.reserve(max_received_msgs);
     subscription_ = this->create_subscription<std_msgs::msg::String>(
@@ -75,7 +78,7 @@ public:
     RCLCPP_INFO(get_logger(), "on_activate() is called.");
     RCLCPP_INFO(get_logger(), "waiting the publisher to match");
 
-    if(!wait_for_publisher()) {
+    if (!wait_for_publisher()) {
       return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::FAILURE;
     }
     RCLCPP_INFO(get_logger(), "publisher matched");

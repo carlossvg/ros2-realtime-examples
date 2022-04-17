@@ -17,8 +17,12 @@ find_package(std_msgs REQUIRED)
 add_executable(minimal_cpu_affinity minimal_cpu_affinity.cpp)
 ament_target_dependencies(minimal_cpu_affinity rclcpp std_msgs)
 
+add_executable(minimal_cpu_affinity_middleware_threads minimal_cpu_affinity_middleware_threads.cpp)
+ament_target_dependencies(minimal_cpu_affinity_middleware_threads rclcpp std_msgs)
+
 install(TARGETS
   minimal_cpu_affinity
+  minimal_cpu_affinity_middleware_threads
   DESTINATION lib/${PROJECT_NAME}
 )
 

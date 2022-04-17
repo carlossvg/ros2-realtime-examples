@@ -51,8 +51,6 @@ int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<MinimalPublisher>();
-
   int cpu_id = 1;
   cpu_set_t cpuset;
   CPU_ZERO(&cpuset);
@@ -62,7 +60,7 @@ int main(int argc, char * argv[])
     printf("Couldn't set CPU affinity. Error code %d", ret);
   }
 
-  rclcpp::spin(node);
+  rclcpp::spin(std::make_shared<MinimalPublisher>());
   rclcpp::shutdown();
   return 0;
 }

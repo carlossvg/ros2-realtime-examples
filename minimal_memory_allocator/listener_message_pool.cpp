@@ -26,17 +26,17 @@ class MinimalSubscriber : public rclcpp::Node
 {
 public:
   MinimalSubscriber()
-      : Node("minimal_subscriber")
+  : Node("minimal_subscriber")
   {
     auto msg_strategy =
-        std::make_shared<MessagePoolMemoryStrategy<std_msgs::msg::Int32, 1>>();
+      std::make_shared<MessagePoolMemoryStrategy<std_msgs::msg::Int32, 1>>();
     subscription_ = this->create_subscription<std_msgs::msg::Int32>(
-        "topic",
-        10,
-        [this](std_msgs::msg::Int32::UniquePtr msg) {
-          RCLCPP_INFO(this->get_logger(), "I heard: '%d'", msg->data);
-        }, rclcpp::SubscriptionOptions(),
-        msg_strategy);
+      "topic",
+      10,
+      [this](std_msgs::msg::Int32::UniquePtr msg) {
+        RCLCPP_INFO(this->get_logger(), "I heard: '%d'", msg->data);
+      }, rclcpp::SubscriptionOptions(),
+      msg_strategy);
   }
 
 private:

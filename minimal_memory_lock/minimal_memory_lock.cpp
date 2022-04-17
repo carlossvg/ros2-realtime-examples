@@ -13,13 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <chrono>
-#include <memory>
-#include <string>
-
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
-
 #include <sys/types.h>
 #include <sys/syscall.h>
 #include <sys/mman.h>
@@ -32,10 +25,21 @@
 #include <unistd.h>
 #include <pthread.h>
 
+#include <chrono>
+#include <memory>
+#include <string>
+
+#include "rclcpp/rclcpp.hpp"
+#include "std_msgs/msg/string.hpp"
+
+
 using namespace std::chrono_literals;
 
-void lock_memory()
+namespace
 {
+void configure_malloc_behavior()
+{
+  // Lock all current and future pages
   if (mlockall(MCL_CURRENT | MCL_FUTURE) != 0) {
     throw std::runtime_error("mlockall failed");
   }
@@ -54,18 +58,19 @@ void lock_memory()
   }
 }
 
-void prefault_dynamic_memory(size_t process_max_dynamic_memory)
+void reserve_process_memory(size_t memory_size)
 {
   void * buf = nullptr;
   const size_t pg_sz = sysconf(_SC_PAGESIZE);
   int res;
-  res = posix_memalign(&buf, static_cast<size_t>(pg_sz), process_max_dynamic_memory);
+  res = posix_memalign(&buf, static_cast<size_t>(pg_sz), memory_size);
   if (res != 0) {
     throw std::runtime_error("proc rt init mem aligning failed");
   }
-  memset(buf, 0, process_max_dynamic_memory);
+  memset(buf, 0, memory_size);
   free(buf);
 }
+}  // namespace
 
 class MinimalPublisher : public rclcpp::Node
 {
@@ -97,8 +102,8 @@ int main(int argc, char * argv[])
   constexpr size_t process_max_dynamic_memory = 10 * 1024 * 1024;
 
   auto node = std::make_shared<MinimalPublisher>();
-  lock_memory();
-  prefault_dynamic_memory(process_max_dynamic_memory);
+  configure_malloc_behavior();
+  reserve_process_memory(process_max_dynamic_memory);
 
   rclcpp::spin(node);
   rclcpp::shutdown();

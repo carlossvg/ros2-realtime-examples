@@ -26,7 +26,6 @@
 
 using namespace std::chrono_literals;
 
-
 class MinimalSubscriber : public rclcpp::Node
 {
 public:
@@ -58,7 +57,7 @@ public:
             log_message(log_msg.value());
             log_msg = logger_queue_.pop();
           }
-         rclcpp::sleep_for(100ms);
+          rclcpp::sleep_for(100ms);
         }
       }
     );

@@ -20,11 +20,12 @@
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/u_int32.hpp"
 
-#include <iceoryx_utils/concurrent/lockfree_queue.hpp>
-
 using namespace std::chrono_literals;
 
 static_assert(std::atomic<std_msgs::msg::UInt32>::is_always_lock_free);
+
+// Bigger data types are not lock free, this asserts would fail
+// static_assert(std::atomic<std_msgs::msg::String>::is_always_lock_free);
 
 class MinimalPublisher : public rclcpp::Node
 {
@@ -47,7 +48,7 @@ public:
     //  - but must run at the same time as callbacks in other groups
 
     auto reentrant_callback_group =
-      this->create_callb_group(rclcpp::CallbackGroupType::Reentrant);
+      this->create_callback_group(rclcpp::CallbackGroupType::Reentrant);
     rclcpp::PublisherOptions options;
     options.callback_group = reentrant_callback_group;
     for (auto pub_index = 0; pub_index < 10; pub_index++) {

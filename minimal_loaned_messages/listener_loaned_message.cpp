@@ -29,8 +29,8 @@ using namespace std::chrono_literals;
 class LoanedMessageListener : public rclcpp::Node
 {
 public:
-  explicit LoanedMessageListener()
-      : Node("loaned_message_listener")
+  LoanedMessageListener()
+  : Node("loaned_message_listener")
   {
     // Create a function for when messages are to be sent.
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
@@ -38,25 +38,27 @@ public:
     // The executor will implicitly use the corresponding code path to handle loaned messages if
     // it is supported by the middleware
     auto pod_sub_cb =
-        [this](std_msgs::msg::Float64::UniquePtr msg) -> void
-        {
-          RCLCPP_INFO(this->get_logger(), "POD subscription. I heard: '%lf'", msg->data);
-        };
+      [this](std_msgs::msg::Float64::UniquePtr msg) -> void
+      {
+        RCLCPP_INFO(this->get_logger(), "POD subscription. I heard: '%lf'", msg->data);
+      };
     auto non_pod_sub_cb =
-        [this](std_msgs::msg::String::UniquePtr msg) -> void
-        {
-          RCLCPP_INFO(this->get_logger(), "Non POD subscription. I heard: '%s'", msg->data.c_str());
-        };
+      [this](std_msgs::msg::String::UniquePtr msg) -> void
+      {
+        RCLCPP_INFO(this->get_logger(), "Non POD subscription. I heard: '%s'", msg->data.c_str());
+      };
 
     // Create a publisher with a custom Quality of Service profile.
     rclcpp::QoS qos(rclcpp::KeepLast(7));
-    pod_sub_ = this->create_subscription<std_msgs::msg::Float64>("chatter_pod",qos, pod_sub_cb);
-    non_pod_sub_ = this->create_subscription<std_msgs::msg::String>("chatter",qos, non_pod_sub_cb);
+    pod_sub_ = this->create_subscription<std_msgs::msg::Float64>("chatter_pod", qos, pod_sub_cb);
+    non_pod_sub_ = this->create_subscription<std_msgs::msg::String>("chatter", qos, non_pod_sub_cb);
 
-    RCLCPP_INFO(this->get_logger(), "POD publisher can_loan_messages: %s",
-                pod_sub_->can_loan_messages() ? "True" : "False");
-    RCLCPP_INFO(this->get_logger(), "Non POD publisher can_loan_messages: %s",
-                non_pod_sub_->can_loan_messages() ? "True" : "False");
+    RCLCPP_INFO(
+      this->get_logger(), "POD publisher can_loan_messages: %s",
+      pod_sub_->can_loan_messages() ? "True" : "False");
+    RCLCPP_INFO(
+      this->get_logger(), "Non POD publisher can_loan_messages: %s",
+      non_pod_sub_->can_loan_messages() ? "True" : "False");
   }
 
 private:

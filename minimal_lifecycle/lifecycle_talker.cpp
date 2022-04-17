@@ -36,22 +36,25 @@ using namespace std::chrono_literals;
 class LifecycleTalker : public rclcpp_lifecycle::LifecycleNode
 {
 public:
-  explicit LifecycleTalker()
+  LifecycleTalker()
   : rclcpp_lifecycle::LifecycleNode("talker"), count_(0)
   {
     RCLCPP_INFO(get_logger(), "Waiting to configure the node");
   }
 
-  bool wait_for_subscription()
+  bool wait_for_subscription(std::chrono::seconds timeout = 10s)
   {
-    std::uint32_t max_iterations = 1000U; // 10s
-    std::uint32_t iterations = 0U;
-    while (rclcpp::ok() && pub_->get_subscription_count() < 1U) {
-      if (iterations >= max_iterations) {
+    bool is_ready = false;
+    std::chrono::time_point<std::chrono::steady_clock> start{std::chrono::steady_clock::now()};
+
+    while (rclcpp::ok() && !is_ready) {
+      is_ready = pub_->get_subscription_count() > 0U;
+      if (!is_ready) {
+        rclcpp::sleep_for(std::chrono::milliseconds(10));
+      }
+      if (std::chrono::steady_clock::now() - start > timeout) {
         return false;
       }
-      iterations++;
-      rclcpp::sleep_for(10ms);
     }
     return true;
   }
@@ -72,7 +75,6 @@ public:
     timer_ = this->create_wall_timer(1s, timer_callback);
     timer_->cancel();
 
-    // TODO: preallocate here
     RCLCPP_INFO(get_logger(), "on_configure() is called.");
     return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
   }
@@ -83,7 +85,7 @@ public:
     RCLCPP_INFO(get_logger(), "on_activate() is called.");
     RCLCPP_INFO(get_logger(), "waiting the subscription to match");
 
-    if(!wait_for_subscription()) {
+    if (!wait_for_subscription()) {
       return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::FAILURE;
     }
 

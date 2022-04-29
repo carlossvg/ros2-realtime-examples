@@ -52,4 +52,9 @@ colcon build --packages-up-to ros2_realtime_examples
 
 <a href="https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP" target="_blank"><img src="https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP.svg" /></a>
 
+### script
+
 <script id="asciicast-vCZaNmDUIf0vx7ApcmJyKLTpP" src="https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP.js" async></script>
+
+### script autoplay
+<script src="https://asciinema.org/a/14.js" id="asciicast-vCZaNmDUIf0vx7ApcmJyKLTpP" async data-autoplay="true" data-size="big"></script>

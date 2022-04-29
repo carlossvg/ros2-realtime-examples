@@ -47,3 +47,9 @@ colcon build --packages-up-to ros2_realtime_examples
 ```
 
 **Note: Some examples might require to install additional RMW implementations**
+
+[![asciicast](https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP.svg)](https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP)
+
+<a href="https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP" target="_blank"><img src="https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP.svg" /></a>
+
+<script id="asciicast-vCZaNmDUIf0vx7ApcmJyKLTpP" src="https://asciinema.org/a/vCZaNmDUIf0vx7ApcmJyKLTpP.js" async></script>
